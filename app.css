@@ -1,0 +1,66 @@
+* , *:before, *:after { 
+    box-sizing: border-box; 
+}
+html {
+   background-color: white;   
+}
+
+body {
+    text-align: center;
+}
+
+.keyboardInput {
+    width: 20rem;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.letter {
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    padding-top: 1rem;
+    font-size: 2rem;
+    display: inline-block;
+    border: 1px solid black;
+}
+
+.letterWrong {
+    color: black;
+}
+
+.letterPossible {
+    background-color: orange;
+    color: black;
+}
+
+.letterMatch {
+    background-color: green;
+    color: white;
+}
+
+.letterButton {
+    width: 2rem;
+}
+
+.flatButton {
+    background: #0CADA7;
+    border: none;
+    color: #FFF;
+    padding: 10px;
+    margin: 2px;
+    text-align:center;
+    text-decoration: none;
+}
+
+.flatButton:hover {
+    background: #0A948F;
+}
+
+.secondRow {
+    margin-left: 1rem;
+}
+
+.thirdRow {
+    margin-left: 2rem;
+}
