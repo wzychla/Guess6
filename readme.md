@@ -2,6 +2,8 @@
 
 This is a simple React/Typescript playground to study basic React features. The app itself is a game which allows the user to guess a 6-letter word from a dictionary. 
 
+![guess6](guess6.png)
+
 # Compilation
 
 To recompile the application, just invoke `webpack` in the root folder
