@@ -11,7 +11,7 @@ const App = () => {
   const [words, setWords] = useState<Array<string>>([]);
   const [secretWord, setSecretWord] = useState<string>('');
 
-  const {acceptedWord, setAcceptedWord} = useContext(KeyboardContext);
+  const {payload, setPayload} = useContext(KeyboardContext);
 
   function getRandomWord(Dictionary: string[]): string {
     const randomIndex = Math.floor(Math.random() * (Dictionary.length));
@@ -23,6 +23,7 @@ const App = () => {
       setSecretWord(getRandomWord(Dictionary));
   }
   
+  // first technique of parent/child data passing - a callback passed from the parent to the child
   function onWordTyped( newWord: string ) {
   //  setWords( words => words.concat([newWord]) );   
   }
@@ -33,9 +34,13 @@ const App = () => {
     }
   }
 
+  // second technique of parent/child data passing - a shared context
+  // the parent listens to context changes
   useEffect( () => {
-    setWords( words => words.concat( acceptedWord ) );
-  }, [acceptedWord] );
+    if ( payload && payload.acceptedWord ) {
+      setWords( words => words.concat( payload.acceptedWord ) );
+    }
+  }, [payload] );
 
   useEffect( () => {
     restartGame();

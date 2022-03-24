@@ -6,7 +6,7 @@ const Keyboard = ({dictionary, expectedLength, onWordTyped} : {dictionary: strin
     const [message, setMessage] = useState<string>('');
     const [word, setWord]       = useState<string>('');
 
-    const { acceptedWord, setAcceptedWord } = useContext(KeyboardContext);
+    const { payload, setPayload } = useContext(KeyboardContext);
 
     const dictOnly              = useRef<HTMLInputElement>();
 
@@ -39,10 +39,13 @@ const Keyboard = ({dictionary, expectedLength, onWordTyped} : {dictionary: strin
             setMessage(`Word ${word} not in dictionary`);
             return;
         }
-      
-        //onWordTyped(word);
 
-        setAcceptedWord(word);
+        // first technique of parent/child data passing - a callback passed from the parent to the child
+        // onWordTyped(word);
+        
+        // second technique of parent/child data passing - a shared context
+        // the child changes the context
+        setPayload({acceptedWord: word});
 
         setWord('');
     }

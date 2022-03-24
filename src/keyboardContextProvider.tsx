@@ -1,11 +1,12 @@
 import React, { ReactNode, useState } from "react";
-import KeyboardContext from "./keyboardContext"
+import KeyboardContext, { KeyboardContextPayload } from "./keyboardContext"
 
 // https://www.carlrippon.com/react-children-with-typescript/
+// context provider wraps the app and creates a shared state that is put into the context
 const KeyboardContextProvider = ({children} : {children: ReactNode}) => {
 
-    const [acceptedWord, setAcceptedWord] = useState<string>('');
-    const context = {acceptedWord, setAcceptedWord};
+    const [payload, setPayload] = useState<KeyboardContextPayload>(null);
+    const context = {payload, setPayload};
 
     return <KeyboardContext.Provider value={context}>
         {children}
