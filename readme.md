@@ -1,13 +1,13 @@
 # Guess6
 
-This is a simple React/Typescript playground to study basic React features. The app itself is a game which allows the user to guess a 6-letter word from a dictionary. 
+This is a simple React/Typescript playground to study basic React features. The app is just a game which allows the user to guess a 6-letter word from a dictionary. 
 
 ![guess6](guess6.png)
 
 # Background
 
 The app was written during a rainy saturday afternoon, in January of 2022. One of my daugthers came with a mobile version of this and a complaint about the mobile app
-showing ads too often. My natural reaction was "hey, this looks simple, I wonder how much time does it take to implement this in React".
+showing ads too often. My natural reaction was "*hey, this looks simple, I wonder how much time does it take to implement this in React*".
 
 Turns out, about an hour, at least for me. I even [blogged about it](https://www.wiktorzychla.com/2022/02/guess6-in-react.html). 
 
@@ -16,7 +16,7 @@ basic React features could be packed together to show various ways of doing thin
 
 # Notable features
 
-There main component, `App`, basically renders the `Keyboard` and a list of candidate word, where each candidate is an instance of the `WordMatch` component.
+The main component, `App`, basically renders the `Keyboard` and a list of candidate words, where each candidate is rendered as an instance of the `WordMatch` component (responsible for correct coloring of letters).
 
 The two, `App` and `Keyboard`, talk to each other - the `App` renders the `Keyboard` but `Keyboard` sends back whatever user accepts as their input. The two-way communication
 between components can be implemented in various ways in React, in particular
