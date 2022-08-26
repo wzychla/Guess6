@@ -1,13 +1,18 @@
-import React, { KeyboardEvent, useContext, useEffect, useRef, useState } from 'react';
-import KeyboardContext from './keyboardContext';
+import React, { useContext, useRef, useState } from 'react';
+import KeyboardContext from './context/keyboardContext';
 
-const Keyboard = ({dictionary, expectedLength, onWordTyped} : {dictionary: string[] | undefined, expectedLength: number, onWordTyped: (word: string) => void}) => {
+/**
+ * Shared-context communication. Both parent and child use a shared context
+ */
+const Keyboard2 = ({dictionary, expectedLength} : {dictionary: string[] | undefined, expectedLength: number}) => {
 
+    // internal state
     const [message, setMessage] = useState<string>('');
     const [word, setWord]       = useState<string>('');
 
-    const { payload, setPayload } = useContext(KeyboardContext);
-
+    // shared context
+    const {payload, setPayload} = useContext(KeyboardContext);
+        
     const dictOnly              = useRef<HTMLInputElement>();
 
     const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -40,13 +45,9 @@ const Keyboard = ({dictionary, expectedLength, onWordTyped} : {dictionary: strin
             return;
         }
 
-        // first technique of parent/child data passing - a callback passed from the parent to the child
-        // onWordTyped(word);
-        
-        // second technique of parent/child data passing - a shared context
-        // the child changes the context
+        // update shared context
         setPayload({acceptedWord: word});
-
+        
         setWord('');
     }
 
@@ -73,4 +74,4 @@ const Keyboard = ({dictionary, expectedLength, onWordTyped} : {dictionary: strin
     </div>;
 }
 
-export default Keyboard;
+export default Keyboard2;

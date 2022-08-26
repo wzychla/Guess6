@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from '@/app';
-import KeyboardContextProvider from './keyboardContextProvider';
+import KeyboardContextProvider from './context/keyboardContextProvider';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 /**
  * Entry point
@@ -13,9 +15,11 @@ class Program {
 
         var app = (
             <React.StrictMode>
-                <KeyboardContextProvider>
-                    <App />
-                </KeyboardContextProvider>                
+                <Provider store={store}>
+                    <KeyboardContextProvider>
+                        <App />
+                    </KeyboardContextProvider>                
+                </Provider>
             </React.StrictMode>
         );
 
