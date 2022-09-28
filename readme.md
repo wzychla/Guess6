@@ -19,14 +19,16 @@ basic React features could be packed together to show various ways of doing thin
 The main component, `App`, basically renders the `Keyboard` and a list of candidate words, where each candidate is rendered as an instance of the `WordMatch` component (responsible for correct coloring of letters).
 
 The two, `App` and `Keyboard`, talk to each other - the `App` renders the `Keyboard` but `Keyboard` sends back whatever user accepts as their input. 
+
 While the top-down communication (from `App` to `Keyboard`) is easy, it's just passing down some arguments from the parent component to the child component, 
 the communication from the child to the parent can be implemented in various ways in React, in particular
 
-* the parent can send a callback down to the child and the child can just call the callback
-* both parent and the child can share the same [Context](https://reactjs.org/docs/context.html)
-* both parent and the child can share a [Redux store](https://redux.js.org/)
+* the parent can send a callback down to the child and child can just call the callback
+* both parent and child can share the same [Context](https://reactjs.org/docs/context.html)
+* both parent and child can share a [Redux store](https://redux.js.org/)
+* both parent and child can share a [Recoil atom](https://recoiljs.org/)
 
-All three are discussed below and implemented in the code
+All these methods are discussed below and implemented in the source code.
 
 ## Passing a callback (`Keyboard1`)
 
@@ -162,7 +164,14 @@ other valid approaches).
 
 ## Sharing a Redux Store (`Keyboard3`)
 
-Redux brings a separate [data store](https://redux.js.org/api/store) and a handful of concepts around. There are [actions](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow#actions) and [reducers](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers#writing-reducers) but it's easier with
+Redux brings a separate [data store](https://redux.js.org/api/store) and a handful of concepts around. 
+Start by adding [React-Redux](https://react-redux.js.org/tutorials/quick-start) with
+
+```
+npm install @reduxjs/toolkit react-redux
+```
+
+There are [actions](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow#actions) and [reducers](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers#writing-reducers) but it's easier with
 [thunks](https://redux.js.org/usage/writing-logic-thunks) (which allow async functions that modify the store) and [Immer](https://redux-toolkit.js.org/usage/immer-reducers)
 (which simplifies writing reducers).
 
@@ -187,6 +196,26 @@ const keyboardInput = useAppSelector(state => state.keyboard);
 **Note:** the Redux store would be a perfect location to store the full list of words typed by user. The reducer's action should just add an element to the list
 and we could have a separate action to clear the list. In our example, it's the `App` component that stores the list and the Redux store is only used to pass a single
 word - the current word typed by the user. This is intentional and just make sure it's always your decision what part of the state is shared in the store.
+
+## Sharing a Recoil Atom (`Keyboard4`)
+
+Recoil is a tiny and simple state management library for React. The atom is defined as
+
+```ts
+const keyboardStateAtom = atom<KeyboardContextPayload>({
+    key: 'keyboardAtom', 
+    default: null
+});
+```
+
+and it's accessed from the parent and child as
+
+```ts
+const [keyboardAtom, setKeyboardAtom] = useRecoilState(keyboardStateAtom);
+```
+
+This approach is similar to a shared context, however, it's slightly more flexible as multiple shared atoms are easier to maintain. Also, Recoil introduces the concept of
+[Selectors](https://recoiljs.org/docs/basic-tutorial/selectors) where it's only a part of an atom (or multiple atoms) is used.
 
 # Compilation
 

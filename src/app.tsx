@@ -3,9 +3,13 @@ import Dictionary from './dictionary';
 import Keyboard1 from './keyboard1';
 import Keyboard2 from './keyboard2';
 import Keyboard3 from './keyboard3';
+import Keyboard4 from './keyboard4';
+
 import KeyboardContext from './context/keyboardContext';
 import WordMatch from './wordMatch';
 import { useAppSelector } from './store/hooks';
+import keyboardStateAtom from './atom/keyboardStateAtom';
+import { useRecoilState } from 'recoil';
 
 const App = () => {
 
@@ -15,12 +19,15 @@ const App = () => {
   const [words, setWords] = useState<Array<string>>([]);
   const [secretWord, setSecretWord] = useState<string>('');
 
-  // shared context
+  // keyboard2: shared Context
   const {payload, } = useContext(KeyboardContext); // setPayload is ignored
 
-  // state selector
+  // keyboard3: Redux state selector
   const keyboardInput = useAppSelector(state => state.keyboard);
 
+  // keyboard4: Recoil state
+  const [keyboardAtom, setKeyboardAtom] = useRecoilState(keyboardStateAtom);  
+  
   function getRandomWord(Dictionary: string[]): string {
     const randomIndex = Math.floor(Math.random() * (Dictionary.length));
     return Dictionary[randomIndex].toUpperCase();
@@ -31,29 +38,37 @@ const App = () => {
       setSecretWord(getRandomWord(Dictionary));
   }
   
-  // callback-passing communication: the callback 
-  function onWordTyped( newWord: string ) {
-      setWords( words => words.concat([newWord]) );   
-  }
-
   function giveUp() {
     if ( secretWord.length == EXPECTEDLENGTH ) {
       setWords( words => words.concat( secretWord ) );
     }
   }
 
-  // shared context communication: dependency on the context's payload
+  // keyboard1: callback-passing communication, the callback 
+  function onWordTyped( newWord: string ) {
+    setWords( words => words.concat([newWord]) );   
+  }
+
+  // keyboard2: shared Context: dependency to the context's payload
   useEffect( () => {
     if ( payload && payload.acceptedWord ) {
       setWords( words => words.concat( payload.acceptedWord ) );
     }
   }, [payload] );
 
+  // keyboard3: dependency resolved by the Redux selector
   useEffect( () => {
     if ( keyboardInput && keyboardInput.acceptedWord ) {
       setWords( words => words.concat( keyboardInput.acceptedWord ) );
     }
   }, [keyboardInput]);
+
+  // keyboard4: dependency resolved by the Recoil's atom
+  useEffect( () => {
+    if ( keyboardAtom && keyboardAtom.acceptedWord ) {
+      setWords( words => words.concat( keyboardAtom.acceptedWord ) );
+    }
+  }, [keyboardAtom]);
 
   useEffect( () => {
     restartGame();
@@ -65,13 +80,21 @@ const App = () => {
       <button className='flatButton' onClick={() => giveUp()}>GIVE UP</button>
     </div>
     <h1>Enter {EXPECTEDLENGTH}-letter word</h1>
-    {/* comment/uncomment a keyboard */}
-    {/* callback-passing style */}
-    <Keyboard1 dictionary={Dictionary} expectedLength={EXPECTEDLENGTH} onWordTyped={onWordTyped} />
-    {/* shared-context */}
+    
+    {/* comment/uncomment one of keyboards to see various ways of passing data between parent (App) and child (Keyboard) */}
+
+    {/* Callback */}
+    {/* <Keyboard1 dictionary={Dictionary} expectedLength={EXPECTEDLENGTH} onWordTyped={onWordTyped} /> */}
+
+    {/* Shared Context */}
     {/* <Keyboard2 dictionary={Dictionary} expectedLength={EXPECTEDLENGTH} /> */}
-    {/* redux store */}
+
+    {/* Redux store */}
     {/* <Keyboard3 dictionary={Dictionary} expectedLength={EXPECTEDLENGTH} /> */}
+
+    {/* Recoil atom */}
+    <Keyboard4 dictionary={Dictionary} expectedLength={EXPECTEDLENGTH} /> 
+
     {words.map( (word, index) => <WordMatch candidate={word} secret={secretWord} key={index} />)}
   </>
 };

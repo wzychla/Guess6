@@ -5,6 +5,7 @@ import App from '@/app';
 import KeyboardContextProvider from './context/keyboardContextProvider';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import { RecoilRoot } from 'recoil';
 
 /**
  * Entry point
@@ -15,11 +16,13 @@ class Program {
 
         var app = (
             <React.StrictMode>
-                <Provider store={store}>
-                    <KeyboardContextProvider>
-                        <App />
-                    </KeyboardContextProvider>                
-                </Provider>
+                <RecoilRoot> {/* Recoil */}
+                    <Provider store={store}> {/* Redux */}
+                        <KeyboardContextProvider> {/* Shared Context */}
+                            <App />
+                        </KeyboardContextProvider>                
+                    </Provider>
+                </RecoilRoot>
             </React.StrictMode>
         );
 
